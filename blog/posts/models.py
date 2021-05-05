@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model as user
+
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(user(), on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(
@@ -22,7 +24,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comment")
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(user(), on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     text = models.TextField()
     created_date = models.DateTimeField(
