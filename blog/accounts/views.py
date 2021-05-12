@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 
 
 class LoginView(APIView):
-    
     permission_classes = [AllowAny]
+    # queryset = user().objects.all()
     serializer_class = serializers.LoginSerializer
 
     def post(self, request):
@@ -27,6 +27,7 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
+    # queryset = user().objects.all()
     serializer_class = serializers.LogoutSerializer
 
     def post(self, request):
@@ -34,8 +35,9 @@ class LogoutView(APIView):
         return Response(status.HTTP_200_OK)
 
 
-class RegisterView(APIView):
+class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
+    queryset = user().objects.all()
     serializer_class = serializers.RegistrationSerializer
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
