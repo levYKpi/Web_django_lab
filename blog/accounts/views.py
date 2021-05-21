@@ -5,7 +5,8 @@ from django.contrib.auth import get_user_model as user, login, logout
 
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.utils import timezone
+from django.contrib.sessions.models import Session
 
 
 class LoginView(generics.GenericAPIView):
@@ -41,6 +42,19 @@ class RegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
+class LoggedView(generics.GenericAPIView):
+    queryset = user().objects.all()
+    serializer_class = serializers.LoggedSerializer
+
+    def get(self, request):
+        sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        uid_list = []
+        for session in sessions:
+            data = session.get_decoded()
+            uid_list.append(data.get('_auth_user_id', None))
+        return Response(data=user().objects.filter(id__in=uid_list[1:]).values(), status=status.HTTP_200_OK)
 
 
 class UserList(generics.ListCreateAPIView):
