@@ -7,6 +7,25 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.utils import timezone
 from django.contrib.sessions.models import Session
+from django.contrib.auth import get_user_model
+
+from blog.celery import app
+import logging
+from django.core.mail import send_mail
+
+
+@app.task
+def sending_mail(email):
+    try:
+        send_mail(
+            'you have logged into your account',
+            'from blog_app: %s' % email,
+            'from@admin.com',
+            [email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        logging.warning(e)
 
 
 class LoginView(generics.GenericAPIView):
@@ -18,7 +37,10 @@ class LoginView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         # print(serializer.data)
-        login(user=user().objects.get(id=serializer.data['id']), request=request)
+        _user = user().objects.get(id=serializer.data['id'])
+        login(user=_user, request=request)
+        print("user:", _user)
+        sending_mail.delay(email=str(_user))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

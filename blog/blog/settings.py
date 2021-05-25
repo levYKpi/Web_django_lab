@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_yasg',
+    'celery',
+
     'accounts',
     'posts',
 ]
@@ -155,3 +157,18 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+from .tmp.email import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'default from email'
+
+# REDIS related settings 
+REDIS_HOST = 'localhost'
+REDIS_PORT = '7777'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
