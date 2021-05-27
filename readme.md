@@ -15,4 +15,5 @@
 Звіт:
 - Lab1: https://docs.google.com/document/d/1YsUVOWd-uAWCajXcdISbGG6tyD-2K6kxILNoGXGm3PY/edit?usp=sharing
 - Lab2: https://docs.google.com/document/d/1gZL3oZl2vMX9KRr6PruB73IIF9vIp7pwuv8UGyLBAVI/edit?usp=sharing
-- Lab3:
+- Lab3: https://docs.google.com/document/d/18Xtb4fz9AMuFla82gPIdUPJguadZ2Q-fFJuEJdlhz0o/edit?usp=sharing
+
